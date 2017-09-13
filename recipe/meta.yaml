@@ -1,5 +1,4 @@
 {% set version = "2.4" %}
-{% set variant = "openblas" %}
 
 package:
   name: gsl
@@ -16,24 +15,12 @@ source:
 
 build:
   number: 0
-  skip: True  # [win and py35]
-  features:
-    - vc9    # [win and py27]
-    - vc14   # [win and (py35 or py36)]
-    - blas_{{ variant }}  # [not win]
 
 requirements:
   build:
+    - {{ compiler('c') }}
     - python  # [win]
-    - vc 9    # [win and py27]
-    - vc 14   # [win and (py35 or py36)]
-    - blas 1.1 {{ variant }}    # [not win]
-    - openblas 0.2.20|0.2.20.*  # [not win]
-  run:
-    - vc 9    # [win and py27]
-    - vc 14   # [win and (py35 or py36)]
-    - blas 1.1 {{ variant }}    # [not win]
-    - openblas 0.2.20|0.2.20.*  # [not win]
+    - openblas-devel {{ openblas }}  # [not win and blas_impl=='openblas']
 
 test:
   commands:
@@ -52,5 +39,6 @@ about:
 
 extra:
   recipe-maintainers:
-    - ocefpaf
     - kwilcox
+    - mingwandroid
+    - ocefpaf
