@@ -19,22 +19,23 @@ build:
   features:
     - vc9    # [win and py27]
     - vc14   # [win and (py35 or py36)]
-    - blas_{{ variant }}  # [not win]
+#    - blas_{{ variant }}  # [not win]
 
 requirements:
   build:
+    - {{ compiler('c') }}
     - python  # [win]
     - vc 9    # [win and py27]
-    - vc 14   # [win and (py35 or py36)]
-    - blas 1.1 {{ variant }}    # [not win]
-    - openblas 0.2.20|0.2.20.*  # [not win]
-  run:
-    - vc 9    # [win and py27]
-    - vc 14   # [win and (py35 or py36)]
-    - blas 1.1 {{ variant }}    # [not win]
-    - openblas 0.2.20|0.2.20.*  # [not win]
+    - vc 14   # [win and py>=35]
+#   - blas 1.1 {{ variant }}    # [not win]
+#   - openblas 0.2.19|0.2.19.*  # [not win]
+# run:
+#   - blas 1.1 {{ variant }}    # [not win]
+#   - openblas 0.2.19|0.2.19.*  # [not win]
 
 test:
+# requires:
+#   - python {{ environ['PY_VER'] + '*' }}  # [win]
   commands:
     - gsl-config --prefix  # [not win]
     - if not exist %LIBRARY_LIB%\\gsl.lib       exit 1   # [win]
