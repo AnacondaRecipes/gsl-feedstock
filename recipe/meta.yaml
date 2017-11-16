@@ -14,13 +14,13 @@ source:
     - bessel_test.diff
 
 build:
-  number: 0
+  number: 3
 
 requirements:
   build:
     - {{ compiler('c') }}
-    - python  # [win]
     - openblas-devel {{ openblas }}  # [not win and blas_impl=='openblas']
+    - cmake  # [win]
 
 test:
   commands:
