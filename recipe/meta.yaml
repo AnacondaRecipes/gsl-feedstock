@@ -14,19 +14,12 @@ source:
     - bessel_test.diff
 
 build:
-  number: 0
-  skip: True  # [win and py35]
-  features:
-    - vc9    # [win and py27]
-    - vc14   # [win and (py35 or py36)]
-#    - blas_{{ variant }}  # [not win]
+  number: 3
 
 requirements:
   build:
     - {{ compiler('c') }}
-    - python  # [win]
-    - vc 9    # [win and py27]
-    - vc 14   # [win and py>=35]
+    - cmake  # [win]
 #   - blas 1.1 {{ variant }}    # [not win]
 #   - openblas 0.2.19|0.2.19.*  # [not win]
 # run:
