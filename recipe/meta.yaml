@@ -5,7 +5,7 @@ package:
   version: {{ version }}
 
 source:
-  url: http://ftpmirror.gnu.org/gsl/gsl-{{ version }}.tar.gz
+  url: http://ftp.gnu.org/gnu/gsl/gsl-{{ version }}.tar.gz
   sha256: 4d46d07b946e7b31c19bbf33dda6204d7bedc2f5462a1bae1d4013426cd1ce9b
   patches:
     # diff from source distribution to https://github.com/ampl/gsl/tree/v2.4.0
