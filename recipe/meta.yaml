@@ -20,15 +20,8 @@ requirements:
   build:
     - {{ compiler('c') }}
     - cmake  # [win]
-#   - blas 1.1 {{ variant }}    # [not win]
-#   - openblas 0.2.19|0.2.19.*  # [not win]
-# run:
-#   - blas 1.1 {{ variant }}    # [not win]
-#   - openblas 0.2.19|0.2.19.*  # [not win]
 
 test:
-# requires:
-#   - python {{ environ['PY_VER'] + '*' }}  # [win]
   commands:
     - gsl-config --prefix  # [not win]
     - if not exist %LIBRARY_LIB%\\gsl.lib       exit 1   # [win]
