@@ -4,14 +4,10 @@
             --host=${HOST}
 
 make -j${CPU_COUNT} ${VERBOSE_AT}
-<<<<<<< HEAD
 # TODO :: One test has too little tolerance to pass on i686
 if [[ ! ${HOST} =~ i686.* ]]; then
   make check
 fi
-=======
-make check
->>>>>>> (WIP) Disable openblas, add cross-compilation support
 make install
 
 # if [[ ${HOST} =~ .*darwin.* ]]; then

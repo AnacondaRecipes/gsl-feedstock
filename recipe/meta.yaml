@@ -14,11 +14,15 @@ source:
     - bessel_test.diff
 
 build:
-  number: 3
+  number: 4
+  run_exports:
+    # tends to break at minor revs
+    #    https://abi-laboratory.pro/index.php?view=timeline&l=gsl
+    - {{ pin_subpackage("gsl", max_pin="x.x") }}
 
 requirements:
   build:
-    - {{ compiler('c') }}
+    - {{ compiler("c") }}
     - cmake  # [win]
 
 test:
@@ -34,7 +38,7 @@ about:
   home: http://www.gnu.org/software/gsl/
   license: GPL-3.0
   license_file: COPYING
-  summary: 'GNU Scientific Library.'
+  summary: GNU Scientific Library
 
 extra:
   recipe-maintainers:
