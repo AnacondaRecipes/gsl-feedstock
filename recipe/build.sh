@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cp -r ${BUILD_PREFIX}/share/libtool/build-aux/config.* .
+
 ./configure --prefix=${PREFIX}  \
             --host=${HOST}
 

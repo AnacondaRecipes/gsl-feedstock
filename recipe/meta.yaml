@@ -24,7 +24,7 @@ requirements:
   build:
     - {{ compiler("c") }}
     - cmake  # [win]
-
+    - libtool  # [not win]
 test:
   commands:
     - gsl-config --prefix  # [not win]
