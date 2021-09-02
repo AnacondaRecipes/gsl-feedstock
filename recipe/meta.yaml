@@ -25,6 +25,8 @@ requirements:
     - {{ compiler("c") }}
     - cmake  # [win]
     - libtool  # [not win]
+  host:
+    - openblas-devel {{ openblas }}  # [blas_impl == 'openblas']
 test:
   commands:
     - gsl-config --prefix  # [not win]

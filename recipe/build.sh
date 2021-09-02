@@ -2,6 +2,10 @@
 
 cp -r ${BUILD_PREFIX}/share/libtool/build-aux/config.* .
 
+if [[ "$target_platform" == osx-* ]]; then
+    export LIBS="-lcblas -lm"
+fi
+
 ./configure --prefix=${PREFIX}  \
             --host=${HOST}
 
