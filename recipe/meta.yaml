@@ -1,4 +1,4 @@
-{% set version = "2.7" %}
+{% set version = "2.7.1" %}
 
 package:
   name: gsl
@@ -6,7 +6,7 @@ package:
 
 source:
   url: http://ftp.gnu.org/gnu/gsl/gsl-{{ version }}.tar.gz
-  sha256: efbbf3785da0e53038be7907500628b466152dbc3c173a87de1b5eba2e23602b
+  sha256: dcb0fbd43048832b757ff9942691a8dd70026d5da0ff85601e52687f6deeb34b
   patches:
     - patch_for_windows.patch        # [win]
     - tt.patch  # [win]
