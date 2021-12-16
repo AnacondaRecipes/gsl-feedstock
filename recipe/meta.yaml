@@ -29,6 +29,8 @@ requirements:
   host:
     - openblas-devel {{ openblas }}  # [blas_implementation == 'openblas']
 test:
+  requires:
+    - conda-build
   commands:
     - gsl-config --prefix  # [not win]
     - if not exist %LIBRARY_LIB%\\gsl.lib       exit 1   # [win]
