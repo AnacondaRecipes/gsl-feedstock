@@ -1,0 +1,3 @@
+blas_implementation:
+  - gslcblas
+  - openblas                   # [not win]
