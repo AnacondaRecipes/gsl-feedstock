@@ -25,7 +25,9 @@ requirements:
     - {{ compiler("c") }}
     - cmake  # [win]
     - libtool  # [not win]
-  host:
+    - patch       # [not win]
+    - m2-patch    # [win]
+   host:
     - openblas-devel {{ openblas }}  # [blas_impl == 'openblas']
 test:
   commands:
