@@ -27,7 +27,7 @@ requirements:
     - libtool  # [not win]
     - patch       # [not win]
     - m2-patch    # [win]
-   host:
+  host:
     - openblas-devel {{ openblas }}  # [blas_impl == 'openblas']
 test:
   commands:
