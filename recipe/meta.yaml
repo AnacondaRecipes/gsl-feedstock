@@ -45,11 +45,13 @@ test:
     - conda inspect objects -p $PREFIX $PKG_NAME  # [osx]
 
 about:
-  home: http://www.gnu.org/software/gsl/
+  home: https://www.gnu.org/software/gsl/
   license: GPL-3.0-or-later
   license_family: GPL
   license_file: COPYING
   summary: GNU Scientific Library
+  dev_url: https://git.savannah.gnu.org/cgit/gsl.git
+  doc_url: https://www.gnu.org/software/gsl/doc/html/index.html
 
 extra:
   recipe-maintainers:
