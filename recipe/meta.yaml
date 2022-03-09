@@ -15,6 +15,7 @@ source:
 
 build:
   number: 0
+  skip: True  # [s390x]
   run_exports:
     # tends to break at minor revs
     #    https://abi-laboratory.pro/index.php?view=timeline&l=gsl
@@ -24,12 +25,15 @@ requirements:
   build:
     - {{ compiler("c") }}
     - cmake  # [win]
+    - make   # [not win]
     - libtool  # [not win]
-    - patch       # [not win]
+    # - patch       # [not win]
     - m2-patch    # [win]
   host:
     - openblas-devel {{ openblas }}  # [blas_impl == 'openblas']
 test:
+  requires:
+    - conda-build  # [not win]
   commands:
     - gsl-config --prefix  # [not win]
     - if not exist %LIBRARY_LIB%\\gsl.lib       exit 1   # [win]
