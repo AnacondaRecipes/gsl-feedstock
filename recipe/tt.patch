@@ -1,0 +1,14 @@
+Index: gsl-2.6/matrix/test.c
+===================================================================
+--- gsl-2.6.orig/matrix/test.c
++++ gsl-2.6/matrix/test.c
+@@ -30,7 +30,9 @@
+ 
+ #include <stdlib.h>
+ #include <stdio.h>
++#if HAVE_UNISTD_H
+ #include <unistd.h>
++#endif
+ #include <math.h>
+ #include <gsl/gsl_math.h>
+ #include <gsl/gsl_matrix.h>
