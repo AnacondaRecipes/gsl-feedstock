@@ -8,13 +8,16 @@ source:
   url: http://ftp.gnu.org/gnu/gsl/gsl-{{ version }}.tar.gz
   sha256: dcb0fbd43048832b757ff9942691a8dd70026d5da0ff85601e52687f6deeb34b
   patches:
+    - patch_for_windows.patch        # [win]
+    - tt.patch  # [win]
     # diff from source distribution to https://github.com/ampl/gsl/tree/v2.4.0
-    - patch_cmake_for_windows.diff  # [win]
+    - patch_cmake_for_windows.patch  # [win]
     # avoid "make check" error: https://savannah.gnu.org/bugs/?52927
     # - bessel_test.diff
 
 build:
   number: 0
+  skip: True  # [s390x]
   run_exports:
     # tends to break at minor revs
     #    https://abi-laboratory.pro/index.php?view=timeline&l=gsl
@@ -24,10 +27,15 @@ requirements:
   build:
     - {{ compiler("c") }}
     - cmake  # [win]
+    - make   # [not win]
     - libtool  # [not win]
+    # - patch       # [not win]
+    - m2-patch    # [win]
   host:
     - openblas-devel {{ openblas }}  # [blas_impl == 'openblas']
 test:
+  requires:
+    - conda-build  # [not win]
   commands:
     - gsl-config --prefix  # [not win]
     - if not exist %LIBRARY_LIB%\\gsl.lib       exit 1   # [win]
