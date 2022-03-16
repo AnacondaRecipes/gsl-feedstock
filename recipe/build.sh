@@ -2,11 +2,17 @@
 
 cp -r ${BUILD_PREFIX}/share/libtool/build-aux/config.* .
 
-if [[ "${blas_implementation}" == "openblas" ]]; then
-    export LIBS="-lopenblas -lcblas -lm"
-elif [[ "${target_platform}" == "osx-arm64" ]]; then
-    export LIBS="-lcblas -lm"
+LIBS="-lm"
+
+if [[ "${target_platform}" == "osx-arm64" ]]; then
+    LIBS="-lcblas ${LIBS}"
 fi
+
+if [[ "${blas_implementation}" == "openblas" ]]; then
+    LIBS="-lopenblas ${LIBS}"
+fi
+
+export LIBS
 
 ./configure --prefix=${PREFIX}  \
             --host=${HOST}
