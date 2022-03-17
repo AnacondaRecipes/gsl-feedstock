@@ -7,7 +7,7 @@ package:
 source:
   url: http://ftp.gnu.org/gnu/gsl/gsl-{{ version }}.tar.gz
   sha256: dcb0fbd43048832b757ff9942691a8dd70026d5da0ff85601e52687f6deeb34b
-  patches:
+  patches:  # [win]
     - patch_for_windows.patch        # [win]
     - tt.patch  # [win]
     # diff from source distribution to https://github.com/ampl/gsl/tree/v2.4.0
