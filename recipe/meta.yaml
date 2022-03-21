@@ -1,4 +1,4 @@
-{% set version = "2.7" %}
+{% set version = "2.7.1" %}
 
 package:
   name: gsl
@@ -6,8 +6,8 @@ package:
 
 source:
   url: http://ftp.gnu.org/gnu/gsl/gsl-{{ version }}.tar.gz
-  sha256: efbbf3785da0e53038be7907500628b466152dbc3c173a87de1b5eba2e23602b
-  patches:
+  sha256: dcb0fbd43048832b757ff9942691a8dd70026d5da0ff85601e52687f6deeb34b
+  patches:  # [win]
     - patch_for_windows.patch        # [win]
     - tt.patch  # [win]
     # diff from source distribution to https://github.com/ampl/gsl/tree/v2.4.0
@@ -32,7 +32,7 @@ requirements:
     # - patch       # [not win]
     - m2-patch    # [win]
   host:
-    - openblas-devel {{ openblas }}  # [blas_impl == 'openblas']
+    - openblas-devel {{ openblas }}  # [blas_implementation == 'openblas']
 test:
   requires:
     - conda-build  # [not win]
@@ -45,10 +45,13 @@ test:
     - conda inspect objects -p $PREFIX $PKG_NAME  # [osx]
 
 about:
-  home: http://www.gnu.org/software/gsl/
-  license: GPL-3.0
+  home: https://www.gnu.org/software/gsl/
+  license: GPL-3.0-or-later
+  license_family: GPL
   license_file: COPYING
   summary: GNU Scientific Library
+  dev_url: https://git.savannah.gnu.org/cgit/gsl.git
+  doc_url: https://www.gnu.org/software/gsl/doc/html/index.html
 
 extra:
   recipe-maintainers:
