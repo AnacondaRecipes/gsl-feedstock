@@ -1,4 +1,37 @@
-Regenerated diff from https://github.com/ampl/gsl/tree/v2.7.0
+From 3464036303d6258c3beecf66111ae8191235953f Mon Sep 17 00:00:00 2001
+From: "Dougal J. Sutherland" <dougal@gmail.com>
+Date: Mon, 5 Mar 2018 21:15:20 +0000
+Subject: [PATCH] changes from release to
+ Regenerated diff from https://github.com/ampl/gsl/tree/v2.7.0
+
+---
+ CMakeLists.txt                              | 711 ++++++++++++++++++++++++++++
+ appveyor.yml                                |   8 +
+ cmake/c_flag_overrides.cmake                |   6 +
+ cmake/cxx_flag_overrides.cmake              |   6 +
+ cmake/init.cmake                            |  92 ++++
+ gsl-msvc14-x64-build.nuget.bat              |  99 ++++
+ gsl-msvc14-x64.nuspec                       |  15 +
+ gsl-msvc14-x86-build.nuget.bat              |  99 ++++
+ gsl-msvc14-x86.nuspec                       |  15 +
+ gsl-msvc14.targets                          |  34 ++
+ gsl.pc.cmake                                |  11 +
+ gsl_inline.h                                |   2 +-
+ multilarge_nlinear/fdf.c                    |   4 +
+ multilarge_nlinear/gsl_multilarge_nlinear.h |   4 +
+ vector/test.c                               |   1 -
+ 19 files changed, 1177 insertions(+), 4 deletions(-)
+ create mode 100644 CMakeLists.txt
+ create mode 100644 appveyor.yml
+ create mode 100644 cmake/c_flag_overrides.cmake
+ create mode 100644 cmake/cxx_flag_overrides.cmake
+ create mode 100644 cmake/init.cmake
+ create mode 100644 gsl-msvc14-x64-build.nuget.bat
+ create mode 100644 gsl-msvc14-x64.nuspec
+ create mode 100644 gsl-msvc14-x86-build.nuget.bat
+ create mode 100644 gsl-msvc14-x86.nuspec
+ create mode 100644 gsl-msvc14.targets
+ create mode 100644 gsl.pc.cmake
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
@@ -1436,151 +1469,6 @@ index f8fb9a0..fad421a 100644
  #  else
  #    define INLINE_DECL         /* use GNU extern inline */
  #    define INLINE_FUN extern inline
-diff --git a/ieee-utils/fp-win.c b/ieee-utils/fp-win.c
-new file mode 100644
-index 0000000..e024eae
---- /dev/null
-+++ b/ieee-utils/fp-win.c
-@@ -0,0 +1,70 @@
-+/* fp-win.c
-+ * 
-+ * Author: Brian Gladman
-+ * 
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or (at
-+ * your option) any later version.
-+ * 
-+ * This program is distributed in the hope that it will be useful, but
-+ * WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * General Public License for more details.
-+ * 
-+ * You should have received a copy of the GNU General Public License
-+ * along with this program; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-+ */
-+
-+#include <float.h>
-+
-+#include <config.h>
-+#include <gsl/gsl_ieee_utils.h>
-+#include <gsl/gsl_errno.h>
-+
-+const char *fp_env_string = "round-to-nearest,double-precision,mask-all";
-+
-+int
-+gsl_ieee_set_mode (int precision, int rounding, int exception_mask)
-+{
-+	unsigned int old, mode = _DN_SAVE, mask = _MCW_DN | _MCW_RC | _MCW_EM;
-+
-+	switch(precision)
-+    {
-+    case GSL_IEEE_SINGLE_PRECISION:		mode |= _PC_24; break;
-+    case GSL_IEEE_EXTENDED_PRECISION:	mode |= _PC_64; break;
-+    case GSL_IEEE_DOUBLE_PRECISION:
-+    default:							mode |= _PC_53;
-+	}
-+#ifndef _M_AMD64
-+	mask |= _MCW_PC;
-+#endif
-+
-+	switch(rounding)
-+    {
-+    case GSL_IEEE_ROUND_DOWN:			mode |= _RC_DOWN; break;
-+    case GSL_IEEE_ROUND_UP:				mode |= _RC_UP;   break;
-+    case GSL_IEEE_ROUND_TO_ZERO:		mode |= _RC_CHOP; break;
-+    case GSL_IEEE_ROUND_TO_NEAREST:
-+    default:							mode |= _RC_NEAR;
-+    }
-+
-+	if(exception_mask & GSL_IEEE_MASK_INVALID)
-+		mode |= _EM_INVALID;
-+	if(exception_mask & GSL_IEEE_MASK_DENORMALIZED)
-+		mode |= _EM_DENORMAL;
-+	if(exception_mask & GSL_IEEE_MASK_DIVISION_BY_ZERO)
-+		mode |= _EM_ZERODIVIDE;
-+	if(exception_mask & GSL_IEEE_MASK_OVERFLOW)
-+		mode |= _EM_OVERFLOW;
-+	if(exception_mask & GSL_IEEE_MASK_UNDERFLOW)
-+		mode |= _EM_UNDERFLOW;
-+	if(exception_mask & GSL_IEEE_TRAP_INEXACT)
-+		mode &= ~_EM_INEXACT;
-+	else
-+		mode |= _EM_INEXACT;
-+
-+	_controlfp_s( &old, mode, mask);
-+	return GSL_SUCCESS;
-+}
-diff --git a/ieee-utils/fp.c b/ieee-utils/fp.c
-index 445a14f..b6ae5af 100644
---- a/ieee-utils/fp.c
-+++ b/ieee-utils/fp.c
-@@ -45,6 +45,8 @@
- #endif
- #elif HAVE_DECL_FEENABLEEXCEPT || HAVE_DECL_FESETTRAPENABLE
- #include "fp-gnuc99.c"
-+#elif _MSC_VER
-+#include "fp-win.c"
- #else
- #include "fp-unknown.c" 
- #endif
-diff --git a/ieee-utils/fp.c.bak b/ieee-utils/fp.c.bak
-new file mode 100644
-index 0000000..445a14f
---- /dev/null
-+++ b/ieee-utils/fp.c.bak
-@@ -0,0 +1,50 @@
-+#include <config.h>
-+
-+#if HAVE_GNUSPARC_IEEE_INTERFACE
-+#include "fp-gnusparc.c"
-+#elif HAVE_GNUM68K_IEEE_INTERFACE
-+#include "fp-gnum68k.c"
-+#elif HAVE_GNUPPC_IEEE_INTERFACE
-+#include "fp-gnuppc.c"
-+#elif HAVE_GNUX86_IEEE_INTERFACE
-+#include "fp-gnux86.c"
-+#elif HAVE_HPUX11_IEEE_INTERFACE
-+#include "fp-hpux11.c"
-+#elif HAVE_HPUX_IEEE_INTERFACE
-+#include "fp-hpux.c"
-+#elif HAVE_SUNOS4_IEEE_INTERFACE
-+#include "fp-sunos4.c"
-+#elif HAVE_SOLARIS_IEEE_INTERFACE
-+#include "fp-solaris.c"
-+#elif HAVE_IRIX_IEEE_INTERFACE
-+#include "fp-irix.c"
-+#elif HAVE_AIX_IEEE_INTERFACE
-+#include "fp-aix.c"
-+#elif HAVE_TRU64_IEEE_INTERFACE
-+#include "fp-tru64.c"
-+#elif HAVE_FREEBSD_IEEE_INTERFACE
-+#include "fp-freebsd.c"
-+#elif HAVE_OS2EMX_IEEE_INTERFACE
-+#include "fp-os2emx.c"
-+#elif HAVE_NETBSD_IEEE_INTERFACE
-+#include "fp-netbsd.c"
-+#elif HAVE_OPENBSD_IEEE_INTERFACE
-+#include "fp-openbsd.c"
-+/* Try to handle universal binaries */
-+#elif HAVE_DARWIN_IEEE_INTERFACE
-+# if defined(__i386__)
-+#  include "fp-darwin86.c"
-+#else
-+#  include "fp-darwin.c"
-+# endif
-+#elif HAVE_DARWIN86_IEEE_INTERFACE
-+# if defined(__ppc__)
-+#  include "fp-darwin.c"
-+# else
-+#  include "fp-darwin86.c"
-+#endif
-+#elif HAVE_DECL_FEENABLEEXCEPT || HAVE_DECL_FESETTRAPENABLE
-+#include "fp-gnuc99.c"
-+#else
-+#include "fp-unknown.c" 
-+#endif
 diff --git a/linalg/qr_tr.c b/linalg/qr_tr.c
 new file mode 100644
 index 0000000..587eb62
@@ -1859,36 +1747,6 @@ index 565d4aa..68f641c 100644
  
        /* copy diagonal into diag */
        gsl_vector_memcpy(diag, &d.vector);
-diff --git a/matrix/test.c b/matrix/test.c
-index da242da..636b0b0 100644
---- a/matrix/test.c
-+++ b/matrix/test.c
-@@ -30,7 +30,9 @@
- 
- #include <stdlib.h>
- #include <stdio.h>
--#include <unistd.h>
-+#if HAVE_UNISTD_H
-+  #include <unistd.h>
-+#endif
- #include <math.h>
- #include <gsl/gsl_math.h>
- #include <gsl/gsl_matrix.h>
-diff --git a/spmatrix/test.c b/spmatrix/test.c
-index 97e0a11..19d2ee2 100644
---- a/spmatrix/test.c
-+++ b/spmatrix/test.c
-@@ -20,7 +20,9 @@
- #include <config.h>
- #include <stdlib.h>
- #include <stdio.h>
--#include <unistd.h>
-+#if HAVE_UNISTD_H
-+  #include <unistd.h>
-+#endif
- #include <math.h>
- #include <gsl/gsl_math.h>
- #include <gsl/gsl_test.h>
 diff --git a/test_modular_build.sh b/test_modular_build.sh
 new file mode 100644
 index 0000000..3de2931
@@ -1914,18 +1772,6 @@ index 0000000..3de2931
 +
 +cd ../..
 \ No newline at end of file
-diff --git a/vector/test.c b/vector/test.c
-index a5f5eee..b0b6bba 100644
---- a/vector/test.c
-+++ b/vector/test.c
-@@ -30,7 +30,9 @@
- #endif
- 
- #include <stdlib.h>
--#include <unistd.h>
-+#if HAVE_UNISTD_H
-+  #include <unistd.h>
-+#endif
- #include <fcntl.h>
- #include <stdio.h>
- #include <gsl/gsl_math.h>
+-- 
+2.16.2
+

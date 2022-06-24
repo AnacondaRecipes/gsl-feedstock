@@ -1,2 +1,5 @@
 openblas:
   - 0.3.20
+blas_implementation:
+  - gslcblas
+  - openblas                   # [not win]
