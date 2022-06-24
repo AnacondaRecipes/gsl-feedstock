@@ -16,7 +16,7 @@ source:
     # - bessel_test.diff
 
 build:
-  number: 0
+  number: 1
   skip: True  # [s390x]
   run_exports:
     # tends to break at minor revs
