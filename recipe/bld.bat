@@ -6,6 +6,7 @@ copy /y "%RECIPE_DIR%\windows_shared.gsl_types.h" "%LIBRARY_INC%\gsl\gsl_types.h
 cmake %SRC_DIR% -G "%CMAKE_GENERATOR%" ^
                     -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX% ^
                     -DBUILD_SHARED_LIBS=ON ^
+                    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ^
                     -DNO_AMPL_BINDINGS=1 ^
                     ..
 if errorlevel 1 exit 1
